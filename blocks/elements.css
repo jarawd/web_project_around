@@ -44,14 +44,13 @@
 }
 
 .elements__heart {
-  cursor: pointer;
-}
-
-.elements__heart-item {
+  width: 20.76px;
+  height: 18.13px;
+  background-image: url(../images/heart-icon.svg);
   transition: opacity 0.2s ease;
 }
 
-.elements__heart:hover .elements__heart-item {
+.elements__heart:hover {
   opacity: 0.6;
 }
 
