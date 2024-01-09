@@ -1,12 +1,12 @@
-let content = document.querySelector(".page");
-let popupOpen = content.querySelector(".popup");
-let addProfile = content.querySelector(".profile__edit");
-let popupClose = content.querySelector(".popup__close");
-let nameContent = content.querySelector(".profile__title");
-let hobbyContent = content.querySelector(".profile__hobby");
-let inputName = content.querySelector(".popup__form-item_name");
-let inputHobby = content.querySelector(".popup__form-item_hobby");
-let saveInfo = content.querySelector(".popup__form-button");
+const content = document.querySelector(".page");
+const popupOpen = content.querySelector(".popup");
+const addProfile = content.querySelector(".profile__edit");
+const popupClose = content.querySelector(".popup__close");
+const nameContent = content.querySelector(".profile__title");
+const hobbyContent = content.querySelector(".profile__hobby");
+const inputName = content.querySelector(".popup__form-item_name");
+const inputHobby = content.querySelector(".popup__form-item_hobby");
+const saveInfo = content.querySelector(".popup__form-button");
 
 function showPopup() {
   inputName.value = nameContent.textContent;
