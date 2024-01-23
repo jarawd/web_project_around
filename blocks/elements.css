@@ -8,19 +8,21 @@
 }
 
 .elements__card {
+  width: 100%;
   max-width: 282px;
-  max-height: 361px;
+  height: 361px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   overflow: hidden;
-  color: #fff;
   background-color: #fff;
   color: #000;
   border-radius: 10px;
-
 }
 
 .elements__img {
   width: 100%;
-  height: auto;
+  height: 282px;
   object-fit: fill;
 }
 
@@ -34,6 +36,7 @@
 }
 
 .elements__title {
+  width: 90%;
   margin: 0;
   font-size: 24px;
   line-height: 29.05px;
