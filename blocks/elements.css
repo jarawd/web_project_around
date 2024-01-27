@@ -8,6 +8,7 @@
 }
 
 .elements__card {
+  position: relative;
   width: 100%;
   max-width: 282px;
   height: 361px;
@@ -49,11 +50,30 @@
 .elements__heart {
   width: 20.76px;
   height: 18.13px;
-  background-image: url(../images/heart-icon.svg);
+  background-image: url(../images/heart-icon-empty.svg);
   transition: opacity 0.2s ease;
 }
 
+.elements__like {
+  background-image: url(../images/heart-icon-fill.svg);
+}
+
 .elements__heart:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.elements__trash {
+  position: absolute;
+  top: 18px;
+  right: 15px;
+  width: 18px;
+  height: 19.3px;
+  background-image: url(../images/trash.svg);
+  transition: opacity 0.2s ease;
+}
+
+.elements__trash:hover {
   opacity: 0.6;
 }
 

@@ -28,13 +28,15 @@
         </div>
         <div class="profile__add">+</div>
       </div>
-      <section class="elements"></section>
+      <section class="elements">
+      </section>
       <footer class="footer">
         <p class="footer__copyright">&copy; 2024 Around The U.S.</p>
       </footer>
     </div>
     <template id="card-template">
       <div class="elements__card">
+        <div class="elements__trash"></div>
         <img class="elements__img" src="" alt="">
         <div class="elements__info">
           <h2 class="elements__title"></h2>
@@ -48,8 +50,8 @@
           <div class="popup__close"></div>
           <h2 class="popup__title"></h2>
           <form class="popup__form">
-            <input type="text" placeholder="" class="popup__form-item popup__form-item_name">
-            <input type="text" placeholder="" class="popup__form-item popup__form-item_info">
+            <input name="name" type="text" placeholder="" class="popup__form-item popup__form-item_name">
+            <input name="info" type="text" placeholder="" class="popup__form-item popup__form-item_info">
             <button type="submit" class="popup__form-button"></button>
           </form>
         </div>
