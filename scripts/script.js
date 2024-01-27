@@ -28,6 +28,9 @@ const cardContainer = document.querySelector("#card-template").content;
 const page = document.querySelector(".page");
 const addCardButton = container.querySelector(".profile__add");
 
+/* Like Button */
+const card = cardContainer.querySelector(".elements__card").cloneNode(true);
+
 function showPopupProfile(title, input1, input2, buttonName) {
   popupProfile.querySelector(".popup__title").textContent = title;
   popupProfile.querySelector(".popup__form-item_name").placeholder = input1;
@@ -58,6 +61,7 @@ function closePopup(e) {
   }
 }
 
+/* Event Listeners */
 container.addEventListener("click", (e) => {
   if (e.target === popupProfileClose || e.target === popupImageClose) {
     closePopup(e);
@@ -84,14 +88,16 @@ container.addEventListener("click", (e) => {
 
   if (e.target === saveImage) {
     e.preventDefault();
-    let imageName = popupImage.querySelector(".popup__form-item_name").value;
-    let pathImage = popupImage.querySelector(".popup__form-item_info").value;
-    const card = cardContainer.querySelector(".elements__card").cloneNode(true);
-    card.querySelector(".elements__img").src = pathImage;
-    card.querySelector(".elements__img").alt = imageName;
-    card.querySelector(".elements__title").textContent = imageName;
-    cards.prepend(card);
     if (inputNameImage.value && inputHobbyImage.value) {
+      let imageName = popupImage.querySelector(".popup__form-item_name").value;
+      let pathImage = popupImage.querySelector(".popup__form-item_info").value;
+      const card = cardContainer
+        .querySelector(".elements__card")
+        .cloneNode(true);
+      card.querySelector(".elements__img").src = pathImage;
+      card.querySelector(".elements__img").alt = imageName;
+      card.querySelector(".elements__title").textContent = imageName;
+      cards.prepend(card);
       closePopup(e);
     }
   }
