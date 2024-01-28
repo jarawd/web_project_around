@@ -1,62 +1,70 @@
-/* Sprint 5 Variables */
+/* Main container */
+const page = document.querySelector(".page");
 
-const container = document.querySelector(".page");
-const addProfile = container.querySelector(".profile__edit");
-const nameProfile = container.querySelector(".profile__title");
-const hobbyProfile = container.querySelector(".profile__hobby");
-const addImage = container.querySelector(".profile__add");
+const addProfile = page.querySelector(".profile__edit");
+const nameProfile = page.querySelector(".profile__title");
+const hobbyProfile = page.querySelector(".profile__hobby");
+const addImage = page.querySelector(".profile__add");
 
-/* Sprint 6 Variables */
-
-/* Popup Profile template */
+/* Templates */
 const popupTemplate = document.querySelector("#popup-template").content;
+const cardTemplate = document.querySelector("#card-template").content;
+const imgTemplate = document.querySelector("#image-template").content;
+
+/* Clones */
 const popupProfile = popupTemplate.querySelector(".popup").cloneNode(true);
+const popupImage = popupTemplate.querySelector(".popup").cloneNode(true);
+const imgPopup = imgTemplate.querySelector(".image-popup").cloneNode(true);
+const card = cardTemplate.querySelector(".elements__card").cloneNode(true);
+
+/* Inputs */
 const inputNameProfile = popupProfile.querySelector(".popup__form-item_name");
 const inputHobbyProfile = popupProfile.querySelector(".popup__form-item_info");
-const saveProfile = popupProfile.querySelector(".popup__form-button");
-const popupProfileClose = popupProfile.querySelector(".popup__close");
-
-/* Popup Add Image template */
-const popupImage = popupTemplate.querySelector(".popup").cloneNode(true);
 const inputNameImage = popupImage.querySelector(".popup__form-item_name");
 const inputHobbyImage = popupImage.querySelector(".popup__form-item_info");
+
+/* Save buttons */
+const saveProfile = popupProfile.querySelector(".popup__form-button");
 const saveImage = popupImage.querySelector(".popup__form-button");
+
+/* Close button */
+const popupProfileClose = popupProfile.querySelector(".popup__close");
 const popupImageClose = popupImage.querySelector(".popup__close");
+const imgPopupClose = imgPopup.querySelector(".image-container__close");
 
-const page = document.querySelector(".page");
-const cards = document.querySelector(".elements");
-const cardContainer = document.querySelector("#card-template").content;
-const addCardButton = container.querySelector(".profile__add");
+const cards = page.querySelector(".elements");
+const addCardButton = page.querySelector(".profile__add");
 
+/* Render images */
 const initialCards = [
   {
-    name: "Valle de Yosemite",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/yosemite.jpg",
+    name: "Langar, UK",
+    link: "https://images.unsplash.com/photo-1533652475678-12f52b4fdd53?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
-    name: "Lago Louise",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/lake-louise.jpg",
+    name: "Tonsai, Thailand",
+    link: "https://images.unsplash.com/photo-1522163182402-834f871fd851?q=80&w=2003&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
-    name: "Montañas Calvas",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/bald-mountains.jpg",
+    name: "La Rosière, France",
+    link: "https://images.unsplash.com/photo-1565992441121-4367c2967103?q=80&w=1854&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
-    name: "Latemar",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/latemar.jpg",
+    name: "Pismo Beach, US",
+    link: "https://images.unsplash.com/photo-1519021228607-ef6e4c22d821?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
-    name: "Parque Nacional de la Vanoise",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/vanoise.jpg",
+    name: "Ceppo, TE, Italia",
+    link: "https://images.unsplash.com/photo-1612734748753-eec35ee8ad57?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
-    name: "Lago di Braies",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/lago.jpg",
+    name: "Taft Point, US",
+    link: "https://images.unsplash.com/photo-1511934149220-29340005ad32?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
 ];
 
 initialCards.forEach((el) => {
-  const card = cardContainer.querySelector(".elements__card").cloneNode(true);
+  const card = cardTemplate.querySelector(".elements__card").cloneNode(true);
   card.querySelector(".elements__img").src = el.link;
   card.querySelector(".elements__img").alt = el.name;
   card.querySelector(".elements__title").textContent = el.name;
@@ -69,7 +77,7 @@ function showPopupProfile(title, input1, input2, buttonName) {
   popupProfile.querySelector(".popup__form-item_info").placeholder = input2;
   popupProfile.querySelector(".popup__form-button").textContent = buttonName;
   popupProfile.classList.add("popup__opened");
-  container.prepend(popupProfile);
+  page.prepend(popupProfile);
 }
 
 function showPopupImage(title, input1, input2, buttonName) {
@@ -78,7 +86,7 @@ function showPopupImage(title, input1, input2, buttonName) {
   popupImage.querySelector(".popup__form-item_info").placeholder = input2;
   popupImage.querySelector(".popup__form-button").textContent = buttonName;
   popupImage.classList.add("popup__opened");
-  container.prepend(popupImage);
+  page.prepend(popupImage);
 }
 
 function closePopup(e) {
@@ -95,9 +103,28 @@ function closePopup(e) {
 
 /* Event Listeners */
 
-container.addEventListener("click", (e) => {
+page.addEventListener("click", (e) => {
   if (e.target.matches(".elements__heart")) {
     e.target.classList.toggle("elements__like");
+  }
+
+  if (e.target.matches(".elements__trash")) {
+    const cardToRemove = e.target.closest(".elements__card");
+    cardToRemove.remove();
+  }
+
+  if (e.target.matches(".elements__img")) {
+    imgPopup.querySelector(".image-container__img").src = e.target.src;
+    imgPopup.querySelector(".image-container__img").alt = e.target.alt;
+    imgPopup.querySelector(".image-container__title").textContent =
+      e.target.alt;
+
+    page.prepend(imgPopup);
+  }
+
+  if (e.target === imgPopupClose) {
+    const img = e.target.closest(".image-popup");
+    img.remove();
   }
 
   if (e.target === popupProfileClose || e.target === popupImageClose) {
@@ -128,9 +155,6 @@ container.addEventListener("click", (e) => {
     if (inputNameImage.value && inputHobbyImage.value) {
       let imageName = popupImage.querySelector(".popup__form-item_name").value;
       let pathImage = popupImage.querySelector(".popup__form-item_info").value;
-      const card = cardContainer
-        .querySelector(".elements__card")
-        .cloneNode(true);
       card.querySelector(".elements__img").src = pathImage;
       card.querySelector(".elements__img").alt = imageName;
       card.querySelector(".elements__title").textContent = imageName;
