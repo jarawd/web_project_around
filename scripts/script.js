@@ -15,7 +15,6 @@ const imgTemplate = document.querySelector("#image-template").content;
 const popupProfile = popupTemplate.querySelector(".popup").cloneNode(true);
 const popupImage = popupTemplate.querySelector(".popup").cloneNode(true);
 const imgPopup = imgTemplate.querySelector(".image-popup").cloneNode(true);
-const card = cardTemplate.querySelector(".elements__card").cloneNode(true);
 
 /* Inputs */
 const inputNameProfile = popupProfile.querySelector(".popup__form-item_name");
@@ -155,6 +154,9 @@ page.addEventListener("click", (e) => {
     if (inputNameImage.value && inputHobbyImage.value) {
       let imageName = popupImage.querySelector(".popup__form-item_name").value;
       let pathImage = popupImage.querySelector(".popup__form-item_info").value;
+      const card = cardTemplate
+        .querySelector(".elements__card")
+        .cloneNode(true);
       card.querySelector(".elements__img").src = pathImage;
       card.querySelector(".elements__img").alt = imageName;
       card.querySelector(".elements__title").textContent = imageName;
