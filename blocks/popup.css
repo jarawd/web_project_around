@@ -63,6 +63,22 @@
   color: #000;
 }
 
+.popup__input-name-error {
+  display: none;
+}
+
+.popup__input-info-error {
+  display: none;
+}
+
+.popup__input_error_active {
+  display: block;
+}
+
+.popup__form-item_invalid {
+  border-bottom: 1px solid #ff0000;
+}
+
 .popup__form-button {
   width: 358px;
   height: 50px;

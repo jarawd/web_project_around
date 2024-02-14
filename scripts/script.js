@@ -77,6 +77,10 @@ function showPopupProfile(title, input1, input2, buttonName) {
   popupProfile.querySelector(".popup__form-item_info").placeholder = input2;
   popupProfile.querySelector(".popup__form-button").textContent = buttonName;
   popupProfile.classList.add("popup__opened");
+  inputNameProfile.setAttribute("minlength", "2");
+  inputNameProfile.setAttribute("maxlength", "40");
+  inputHobbyProfile.setAttribute("minlength", "2");
+  inputHobbyProfile.setAttribute("maxlength", "200");
   page.prepend(popupProfile);
 }
 
@@ -139,11 +143,9 @@ page.addEventListener("click", (e) => {
 
   if (e.target === saveProfile) {
     e.preventDefault();
-    if (inputNameProfile.value && inputHobbyProfile.value) {
-      nameProfile.textContent = inputNameProfile.value;
-      hobbyProfile.textContent = inputHobbyProfile.value;
-      closePopup(e);
-    }
+    nameProfile.textContent = inputNameProfile.value;
+    hobbyProfile.textContent = inputHobbyProfile.value;
+    closePopup(e);
   }
 
   if (e.target === addImage) {
@@ -163,3 +165,66 @@ page.addEventListener("click", (e) => {
     }
   }
 });
+
+/* Forms Validations */
+
+// Mostrar span de invalido
+const showInputError = (form, input, errorMessage) => {
+  const errorElement = form.querySelector(`${input.id}-error`);
+  input.classList.add("popup__form-item_invalid");
+  errorElement.textContent = errorMessage;
+  errorElement.classList.add("popup__input_error_active");
+};
+
+// Esconder span de invalido
+const hideInputError = (form, input) => {
+  const errorElement = form.querySelector(`${input.id}-error`);
+  input.classList.remove("popup__form-item_invalid");
+  errorElement.classList.remove("popup__input_error_active");
+  errorElement.textContent = "";
+};
+
+// Validar un input - llamar dentro de esta funcion a showInputError() y hideInputError()
+const validityInput = (form, input) => {
+  if (!input.validity.valid) {
+    showInputError(form, input, input.validationMessage);
+  } else {
+    hideInputError(form, input);
+  }
+};
+
+// Validar todos los input - metodo some con la propiedad: validity.valid
+const validityAllInputs = (inputList) => {
+  return inputList.some((inputElement) => {
+    return !inputElement.validity.valid;
+  });
+};
+
+// Enable/Disable button
+const toggleButton = (form, inputList) => {
+  const button = form.querySelector(".popup__form-button");
+  if (!validityAllInputs(inputList)) {
+    button.disabled = true;
+  } else {
+    button.disabled = false;
+  }
+};
+
+// setEventListeners para agregar el evento input a todos los campos
+const setEventListeners = (form) => {
+  const inputList = Array.from(form.querySelectorAll(".popup__form-item"));
+  toggleButton(form, inputList);
+  inputList.forEach((el, i, arr) => {
+    el.addEventListener("input", (evt) => {
+      validityInput(form, el);
+      toggleButton(form, arr);
+    });
+  });
+};
+
+// Obtener todos los forms de la pagina y asignarles el setEventListeners()
+// const formValidation = () => {
+//   const formList = document.querySelector;
+// };
+
+// mandar llamar la funcion formValidation()
