@@ -15,13 +15,12 @@ const imgTemplate = document.querySelector("#image-template").content;
 const popupProfile = popupTemplate.querySelector(".popup").cloneNode(true);
 const popupImage = popupTemplate.querySelector(".popup").cloneNode(true);
 const imgPopup = imgTemplate.querySelector(".image-popup").cloneNode(true);
-const card = cardTemplate.querySelector(".elements__card").cloneNode(true);
 
 /* Inputs */
 const inputNameProfile = popupProfile.querySelector(".popup__form-item_name");
 const inputHobbyProfile = popupProfile.querySelector(".popup__form-item_info");
 const inputNameImage = popupImage.querySelector(".popup__form-item_name");
-const inputHobbyImage = popupImage.querySelector(".popup__form-item_info");
+const inputPathImage = popupImage.querySelector(".popup__form-item_info");
 
 /* Save buttons */
 const saveProfile = popupProfile.querySelector(".popup__form-button");
@@ -74,6 +73,7 @@ initialCards.forEach((el) => {
 function showPopupProfile(title, input1, input2, buttonName) {
   popupProfile.querySelector(".popup__title").textContent = title;
   popupProfile.querySelector(".popup__form-item_name").placeholder = input1;
+  popupProfile.querySelector(".popup__form-item_info").type = "text";
   popupProfile.querySelector(".popup__form-item_info").placeholder = input2;
   popupProfile.querySelector(".popup__form-button").textContent = buttonName;
   popupProfile.classList.add("popup__opened");
@@ -87,22 +87,20 @@ function showPopupProfile(title, input1, input2, buttonName) {
 function showPopupImage(title, input1, input2, buttonName) {
   popupImage.querySelector(".popup__title").textContent = title;
   popupImage.querySelector(".popup__form-item_name").placeholder = input1;
+  popupImage.querySelector(".popup__form-item_info").type = "url";
   popupImage.querySelector(".popup__form-item_info").placeholder = input2;
   popupImage.querySelector(".popup__form-button").textContent = buttonName;
   popupImage.classList.add("popup__opened");
+  inputNameImage.setAttribute("minlength", "2");
+  inputNameImage.setAttribute("maxlength", "30");
   page.prepend(popupImage);
 }
 
-function closePopup(e) {
-  if (e.target === popupProfileClose || e.target === saveProfile) {
-    popupProfile.classList.remove("popup__opened");
-  }
-
-  if (e.target === popupImageClose || e.target === saveImage) {
-    popupImage.classList.remove("popup__opened");
-    popupImage.querySelector(".popup__form-item_name").value = "";
-    popupImage.querySelector(".popup__form-item_info").value = "";
-  }
+function closePopup() {
+  popupProfile.classList.remove("popup__opened");
+  popupProfile.querySelector(".popup__form-item_name").value = "";
+  popupProfile.querySelector(".popup__form-item_info").value = "";
+  popupImage.classList.remove("popup__opened");
 }
 
 /* Event Listeners */
@@ -122,109 +120,74 @@ page.addEventListener("click", (e) => {
     imgPopup.querySelector(".image-container__img").alt = e.target.alt;
     imgPopup.querySelector(".image-container__title").textContent =
       e.target.alt;
-
     page.prepend(imgPopup);
   }
 
-  if (e.target === imgPopupClose) {
+  if (e.target === imgPopupClose || e.target === imgPopup) {
     const img = e.target.closest(".image-popup");
     img.remove();
   }
 
-  if (e.target === popupProfileClose || e.target === popupImageClose) {
-    closePopup(e);
+  if (
+    e.target === popupProfileClose ||
+    e.target === popupImageClose ||
+    e.target === popupProfile ||
+    e.target === popupImage
+  ) {
+    closePopup();
   }
 
   if (e.target === addProfile) {
     inputNameProfile.value = nameProfile.textContent;
     inputHobbyProfile.value = hobbyProfile.textContent;
+    enableValidation({
+      formSelector: popupProfile.querySelector(".popup__form"),
+      submitButtonSelector: popupProfile.querySelector(".popup__form-button"),
+      inactiveButtonClass: "popup-btn-disabled",
+      inputErrorClass: "popup__form-item_invalid",
+    });
     showPopupProfile("Edit profile", "Name", "Hobby", "Save");
   }
 
   if (e.target === saveProfile) {
-    e.preventDefault();
     nameProfile.textContent = inputNameProfile.value;
     hobbyProfile.textContent = inputHobbyProfile.value;
-    closePopup(e);
+    closePopup();
   }
 
   if (e.target === addImage) {
+    inputNameImage.value = "";
+    inputPathImage.value = "";
+    enableValidation({
+      formSelector: popupImage.querySelector(".popup__form"),
+      submitButtonSelector: popupImage.querySelector(".popup__form-button"),
+      inactiveButtonClass: "popup-btn-disabled",
+    });
     showPopupImage("Nuevo lugar", "Título", "Enlace de la imagen", "Crear");
   }
 
   if (e.target === saveImage) {
-    e.preventDefault();
-    if (inputNameImage.value && inputHobbyImage.value) {
+    if (inputNameImage.value && inputPathImage.value) {
       let imageName = popupImage.querySelector(".popup__form-item_name").value;
       let pathImage = popupImage.querySelector(".popup__form-item_info").value;
+      const card = cardTemplate
+        .querySelector(".elements__card")
+        .cloneNode(true);
       card.querySelector(".elements__img").src = pathImage;
       card.querySelector(".elements__img").alt = imageName;
       card.querySelector(".elements__title").textContent = imageName;
       cards.prepend(card);
-      closePopup(e);
+      closePopup();
     }
   }
 });
 
-/* Forms Validations */
-
-// Mostrar span de invalido
-const showInputError = (form, input, errorMessage) => {
-  const errorElement = form.querySelector(`${input.id}-error`);
-  input.classList.add("popup__form-item_invalid");
-  errorElement.textContent = errorMessage;
-  errorElement.classList.add("popup__input_error_active");
-};
-
-// Esconder span de invalido
-const hideInputError = (form, input) => {
-  const errorElement = form.querySelector(`${input.id}-error`);
-  input.classList.remove("popup__form-item_invalid");
-  errorElement.classList.remove("popup__input_error_active");
-  errorElement.textContent = "";
-};
-
-// Validar un input - llamar dentro de esta funcion a showInputError() y hideInputError()
-const validityInput = (form, input) => {
-  if (!input.validity.valid) {
-    showInputError(form, input, input.validationMessage);
-  } else {
-    hideInputError(form, input);
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") {
+    popupProfile.classList.remove("popup__opened");
+    popupProfile.querySelector(".popup__form-item_name").value = "";
+    popupProfile.querySelector(".popup__form-item_info").value = "";
+    popupImage.classList.remove("popup__opened");
+    imgPopup.remove();
   }
-};
-
-// Validar todos los input - metodo some con la propiedad: validity.valid
-const validityAllInputs = (inputList) => {
-  return inputList.some((inputElement) => {
-    return !inputElement.validity.valid;
-  });
-};
-
-// Enable/Disable button
-const toggleButton = (form, inputList) => {
-  const button = form.querySelector(".popup__form-button");
-  if (!validityAllInputs(inputList)) {
-    button.disabled = true;
-  } else {
-    button.disabled = false;
-  }
-};
-
-// setEventListeners para agregar el evento input a todos los campos
-const setEventListeners = (form) => {
-  const inputList = Array.from(form.querySelectorAll(".popup__form-item"));
-  toggleButton(form, inputList);
-  inputList.forEach((el, i, arr) => {
-    el.addEventListener("input", (evt) => {
-      validityInput(form, el);
-      toggleButton(form, arr);
-    });
-  });
-};
-
-// Obtener todos los forms de la pagina y asignarles el setEventListeners()
-// const formValidation = () => {
-//   const formList = document.querySelector;
-// };
-
-// mandar llamar la funcion formValidation()
+});
