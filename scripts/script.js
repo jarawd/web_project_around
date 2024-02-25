@@ -1,3 +1,5 @@
+import { enableValidation } from "./validate.js";
+
 /* Main container */
 const page = document.querySelector(".page");
 
@@ -103,6 +105,17 @@ function closePopup() {
   popupImage.classList.remove("popup__opened");
 }
 
+function closeWithEscape(e) {
+  if (e.key === "Escape") {
+    popupProfile.classList.remove("popup__opened");
+    popupProfile.querySelector(".popup__form-item_name").value = "";
+    popupProfile.querySelector(".popup__form-item_info").value = "";
+    popupImage.classList.remove("popup__opened");
+    imgPopup.remove();
+    document.removeEventListener("keydown", closeWithEscape);
+  }
+}
+
 /* Event Listeners */
 
 page.addEventListener("click", (e) => {
@@ -121,6 +134,7 @@ page.addEventListener("click", (e) => {
     imgPopup.querySelector(".image-container__title").textContent =
       e.target.alt;
     page.prepend(imgPopup);
+    document.addEventListener("keydown", closeWithEscape);
   }
 
   if (e.target === imgPopupClose || e.target === imgPopup) {
@@ -147,6 +161,7 @@ page.addEventListener("click", (e) => {
       inputErrorClass: "popup__form-item_invalid",
     });
     showPopupProfile("Edit profile", "Name", "Hobby", "Save");
+    document.addEventListener("keydown", closeWithEscape);
   }
 
   if (e.target === saveProfile) {
@@ -164,6 +179,7 @@ page.addEventListener("click", (e) => {
       inactiveButtonClass: "popup-btn-disabled",
     });
     showPopupImage("Nuevo lugar", "Título", "Enlace de la imagen", "Crear");
+    document.addEventListener("keydown", closeWithEscape);
   }
 
   if (e.target === saveImage) {
@@ -179,15 +195,5 @@ page.addEventListener("click", (e) => {
       cards.prepend(card);
       closePopup();
     }
-  }
-});
-
-document.addEventListener("keydown", function (e) {
-  if (e.key === "Escape") {
-    popupProfile.classList.remove("popup__opened");
-    popupProfile.querySelector(".popup__form-item_name").value = "";
-    popupProfile.querySelector(".popup__form-item_info").value = "";
-    popupImage.classList.remove("popup__opened");
-    imgPopup.remove();
   }
 });

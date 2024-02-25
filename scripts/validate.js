@@ -34,7 +34,7 @@ const toggleButton = (inputList, btn, enableButton) => {
   }
 };
 
-const enableValidation = (obj) => {
+export const enableValidation = (obj) => {
   const form = obj.formSelector;
   const inputList = Array.from(form.querySelectorAll(".popup__form-item"));
   toggleButton(inputList, obj.submitButtonSelector, obj.inactiveButtonClass);
