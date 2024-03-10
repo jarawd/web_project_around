@@ -14,6 +14,8 @@ Sitio web que contiene fotografias de lugares de Estados Unidos. Además tiene l
 - Metodología BEM.
 - Media Queries para el diseño responsivo.
 - Javascript (Manejo del DOM).
+- POO.
+- Javascript modular.
 - Git.
 
 # Enlace al sitio web:
