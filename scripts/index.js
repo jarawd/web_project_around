@@ -92,8 +92,6 @@ function closeWithEscape(e) {
 
 /* Event Listeners */
 
-document.removeEventListener("keydown", closeWithEscape);
-
 page.addEventListener("click", (e) => {
   if (e.target.matches(".elements__heart")) {
     e.target.classList.toggle("elements__like");
@@ -106,10 +104,12 @@ page.addEventListener("click", (e) => {
 
   if (e.target === popupProfileClose || e.target === popupProfile) {
     closePopup(popupProfile);
+    document.removeEventListener("keydown", closeWithEscape);
   }
 
   if (e.target === popupImageClose || e.target === popupImage) {
     closePopup(popupImage);
+    document.removeEventListener("keydown", closeWithEscape);
   }
 
   if (e.target === addProfile) {
@@ -143,6 +143,7 @@ page.addEventListener("click", (e) => {
     nameProfile.textContent = inputNameProfile.value;
     hobbyProfile.textContent = inputHobbyProfile.value;
     closePopup(popupProfile);
+    document.removeEventListener("keydown", closeWithEscape);
   }
 
   if (e.target === addImage) {
@@ -174,8 +175,12 @@ page.addEventListener("click", (e) => {
 
   if (e.target === saveImage) {
     if (inputNameImage.value && inputPathImage.value) {
-      let imageName = popupImage.querySelector(".popup__form-item_name").value;
-      let pathImage = popupImage.querySelector(".popup__form-item_info").value;
+      const imageName = popupImage.querySelector(
+        ".popup__form-item_name"
+      ).value;
+      const pathImage = popupImage.querySelector(
+        ".popup__form-item_info"
+      ).value;
       const card = cardTemplate
         .querySelector(".elements__card")
         .cloneNode(true);
@@ -184,6 +189,7 @@ page.addEventListener("click", (e) => {
       card.querySelector(".elements__title").textContent = imageName;
       cards.prepend(card);
       closePopup(popupImage);
+      document.removeEventListener("keydown", closeWithEscape);
     }
   }
 });

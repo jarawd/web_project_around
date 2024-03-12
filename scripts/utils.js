@@ -17,8 +17,20 @@ export function showPopup(obj) {
   document.addEventListener("keydown", obj.closeWithEscape);
 }
 
+function resetErrors(form) {
+  const spanList = form.querySelectorAll(".popup__span-error");
+  spanList.forEach((el) => {
+    el.textContent = "";
+  });
+  const inputList = form.querySelectorAll(".popup__form-item");
+  inputList.forEach((el) => {
+    el.classList.remove("popup__form-item_invalid");
+  });
+}
+
 export function closePopup(popup) {
   popup.classList.remove("popup__opened");
   popup.querySelector(".popup__form-item_name").value = "";
   popup.querySelector(".popup__form-item_info").value = "";
+  resetErrors(popup);
 }
