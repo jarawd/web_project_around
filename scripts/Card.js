@@ -1,8 +1,9 @@
 export default class Card {
-  constructor(data, cardSelector) {
+  constructor(data, cardSelector, { handleCardClick }) {
     this._name = data.name;
     this._link = data.link;
     this._cardSelector = cardSelector;
+    this._handleCardClick = handleCardClick;
   }
 
   _getTemplate() {
@@ -14,39 +15,22 @@ export default class Card {
     return this._cardTemplate;
   }
 
-  generateCard(obj) {
+  generateCard() {
     this._card = this._getTemplate();
     this._card.querySelector(".elements__img").src = this._link;
     this._card.querySelector(".elements__img").alt = this._name;
     this._card.querySelector(".elements__title").textContent = this._name;
-    this._setEventListeners(obj);
+    this.setEventListeners();
     return this._card;
   }
 
-  _openPopupHandler(obj) {
-    obj.imgPopup.querySelector(".image-container__img").src = this._link;
-    obj.imgPopup.querySelector(".image-container__img").alt = this._name;
-    obj.imgPopup.querySelector(".image-container__title").textContent =
-      this._name;
-    obj.page.prepend(obj.imgPopup);
-    document.addEventListener("keydown", obj.closeEscape);
+  getImage() {
+    return this._card.querySelector(".elements__img");
   }
 
-  closePopupHandler(obj) {
-    obj.imgPopup.remove();
-  }
-
-  _setEventListeners(obj) {
+  setEventListeners() {
     this._card.querySelector(".elements__img").addEventListener("click", () => {
-      this._openPopupHandler(obj);
-    });
-
-    obj.btnClose.addEventListener("click", () => {
-      this.closePopupHandler(obj);
-    });
-
-    obj.imgPopup.addEventListener("click", () => {
-      this.closePopupHandler(obj);
+      this._handleCardClick();
     });
   }
 }
