@@ -17,6 +17,7 @@ Sitio web que contiene fotografias de lugares de Estados Unidos. Además tiene l
 - POO.
 - Javascript modular.
 - Git.
+- Webpack.
 
 # Enlace al sitio web:
 
