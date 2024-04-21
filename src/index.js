@@ -5,13 +5,19 @@ import PopupWithImage from "./scripts/PopupWithImage.js";
 import PopupWithForm from "./scripts/PopupWithForm.js";
 import UserInfo from "./scripts/UserInfo.js";
 import "./styles/index.css";
-import stepsSrc from "./images/imageAvatar.jpg";
+import PopupWithConfirmation from "./scripts/PopupWithConfirmation.js";
+import PopupProfileImage from "./scripts/PopupProfileImage.js";
+import Api from "./scripts/Api.js";
+
+/*
+My token: e42f8e22-9ca0-486e-b216-ea9a771afa3a
+Gropu ID: web_es_12
+*/
 
 /* Main container */
 const page = document.querySelector(".page");
 
 const imageProfile = document.getElementById("profile-image");
-imageProfile.src = stepsSrc;
 const addProfile = page.querySelector(".profile__edit");
 const nameProfile = page.querySelector(".profile__title");
 const hobbyProfile = page.querySelector(".profile__hobby");
@@ -20,73 +26,96 @@ const addImage = page.querySelector(".profile__add");
 /* Templates */
 const popupTemplate = document.querySelector("#popup-template").content;
 const imgTemplate = document.querySelector("#image-template").content;
+const popupConfirmTemplate = document.querySelector(
+  "#popup-confirm-template"
+).content;
+const avatarTemplate = document.querySelector(
+  "#popup-profile-template"
+).content;
 
 /* Clones */
 const popupProfile = popupTemplate.querySelector(".popup").cloneNode(true);
 const popupImage = popupTemplate.querySelector(".popup").cloneNode(true);
 const imgPopup = imgTemplate.querySelector(".image-popup").cloneNode(true);
+const popupConfirm = popupConfirmTemplate
+  .querySelector(".popup-confirm")
+  .cloneNode(true);
+const popupAvatar = avatarTemplate
+  .querySelector(".popup-profile")
+  .cloneNode(true);
 
+/* Profile Image */
+const profileAvatar = document.querySelector(".profile__image");
 const cards = page.querySelector(".elements");
 
-/* Render images */
-const initialCards = [
-  {
-    name: "Langar, UK",
-    link: "https://images.unsplash.com/photo-1533652475678-12f52b4fdd53?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    name: "Tonsai, Thailand",
-    link: "https://images.unsplash.com/photo-1522163182402-834f871fd851?q=80&w=2003&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    name: "La Rosière, France",
-    link: "https://images.unsplash.com/photo-1565992441121-4367c2967103?q=80&w=1854&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    name: "Pismo Beach, US",
-    link: "https://images.unsplash.com/photo-1519021228607-ef6e4c22d821?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    name: "Ceppo, TE, Italia",
-    link: "https://images.unsplash.com/photo-1612734748753-eec35ee8ad57?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    name: "Taft Point, US",
-    link: "https://images.unsplash.com/photo-1511934149220-29340005ad32?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-];
+const api = new Api();
 
-const renderCards = new Section(
-  {
-    data: initialCards,
-    renderer: (item) => {
-      const card = new Card(item, "#card-template", {
-        handleCardClick: () => {
-          const image = new PopupWithImage(imgPopup, card.getImage());
-          image.open();
+api
+  .setProfileInfo()
+  .then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Error: ${res.status}`);
+  })
+  .then((data) => {
+    nameProfile.textContent = data.name;
+    hobbyProfile.textContent = data.about;
+    imageProfile.src = data.avatar;
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+/* Render Cards */
+
+api
+  .getInitialCards()
+  .then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Error: ${res.status}`);
+  })
+  .then((data) => {
+    const renderCards = new Section(
+      {
+        data,
+        renderer: (item) => {
+          const card = new Card(item, "#card-template", {
+            handleCardClick: () => {
+              const image = new PopupWithImage(imgPopup, card.getImage());
+              image.open();
+            },
+            handleCardClose: () => {
+              const removeCardPopup = new PopupWithConfirmation(popupConfirm, {
+                card: item,
+                element: card,
+                removeCard: api.deleteCard,
+              });
+              removeCardPopup.open();
+            },
+            likes: api.getLikes,
+            dislikes: api.getDislikes,
+            obj: item,
+          });
+
+          const elementCard = card.generateCard();
+          renderCards.addItem(elementCard);
         },
-      });
-      const elementCard = card.generateCard();
-      renderCards.addItem(elementCard);
-    },
-  },
-  cards
-);
+      },
+      cards
+    );
 
-renderCards.renderItems();
+    renderCards.renderItems();
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 /* Event Listeners */
 
 page.addEventListener("click", (e) => {
-  if (e.target.matches(".elements__heart")) {
-    e.target.classList.toggle("elements__like");
-  }
-
-  if (e.target.matches(".elements__trash")) {
-    const cardToRemove = e.target.closest(".elements__card");
-    cardToRemove.remove();
-  }
-
   if (e.target === addProfile) {
     const profileForm = new PopupWithForm(
       {
@@ -101,7 +130,11 @@ page.addEventListener("click", (e) => {
         },
         setData: () => {
           const user = new UserInfo(
-            { nameSelector: nameProfile, jobSelector: hobbyProfile },
+            {
+              nameSelector: nameProfile,
+              jobSelector: hobbyProfile,
+              setUser: api.setUser,
+            },
             popupProfile
           );
 
@@ -117,6 +150,7 @@ page.addEventListener("click", (e) => {
         submitButtonSelector: popupProfile.querySelector(".popup__form-button"),
         inactiveButtonClass: "popup-btn-disabled",
         inputErrorClass: "popup__form-item_invalid",
+        input: ".popup__form-item",
       },
       popupProfile.querySelector(".popup__form")
     );
@@ -140,17 +174,47 @@ page.addEventListener("click", (e) => {
               data: [obj],
               renderer: (obj) => {
                 if (Object.values(obj).every((el) => el.length !== 0)) {
-                  const card = new Card(obj, "#card-template", {
-                    handleCardClick: () => {
-                      const image = new PopupWithImage(
-                        imgPopup,
-                        card.getImage()
-                      );
-                      image.open();
-                    },
-                  });
-                  const elementCard = card.generateCard();
-                  addCard.addItem(elementCard);
+                  imageForm.buttonName = "Guardando...";
+                  imageForm.open();
+                  api
+                    .getCard(obj)
+                    .then((res) => {
+                      if (res.ok) {
+                        return res.json();
+                      }
+                      return Promise.reject(`Error: ${res.status}`);
+                    })
+                    .then((data) => {
+                      const card = new Card(data, "#card-template", {
+                        handleCardClick: () => {
+                          const image = new PopupWithImage(
+                            imgPopup,
+                            card.getImage()
+                          );
+                          image.open();
+                        },
+                        handleCardClose: () => {
+                          const removeCard = new PopupWithConfirmation(
+                            popupConfirm,
+                            {
+                              card: data,
+                              element: card,
+                              removeCard: api.deleteCard,
+                            }
+                          );
+                          removeCard.open();
+                        },
+                        likes: api.getLikes,
+                        dislikes: api.getDislikes,
+                        obj: data,
+                      });
+                      const elementCard = card.generateCard();
+                      addCard.addItem(elementCard);
+                      imageForm.close();
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
                 }
               },
             },
@@ -168,8 +232,50 @@ page.addEventListener("click", (e) => {
         submitButtonSelector: popupImage.querySelector(".popup__form-button"),
         inactiveButtonClass: "popup-btn-disabled",
         inputErrorClass: "popup__form-item_invalid",
+        input: ".popup__form-item",
       },
       popupImage.querySelector(".popup__form")
+    );
+
+    validator.enableValidation();
+  }
+
+  if (e.target === profileAvatar) {
+    const changeAvatar = new PopupProfileImage(popupAvatar, {
+      modifyAvatar: () => {
+        const url = popupAvatar.querySelector(
+          ".popup-profile__form-item"
+        ).value;
+        changeAvatar.buttonName.textContent = "Guardando...";
+        changeAvatar.open();
+        api
+          .getAvatar(url)
+          .then((res) => {
+            if (res.ok) {
+              return res.json();
+            }
+            return Promise.reject(`Error: ${res.status}`);
+          })
+          .then((data) => {
+            imageProfile.src = data.avatar;
+            changeAvatar.close();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      },
+    });
+    changeAvatar.open();
+    const validator = new FormValidator(
+      {
+        submitButtonSelector: popupAvatar.querySelector(
+          ".popup-profile__button"
+        ),
+        inactiveButtonClass: "popup-btn-disabled",
+        inputErrorClass: "popup__form-item_invalid",
+        input: ".popup-profile__form-item",
+      },
+      popupAvatar.querySelector(".popup-profile__form")
     );
 
     validator.enableValidation();

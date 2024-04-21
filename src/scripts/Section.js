@@ -10,7 +10,8 @@ export default class Section {
   }
 
   renderItems() {
-    this._items.forEach((el) => {
+    const invertedArray = this._items.reverse();
+    invertedArray.forEach((el) => {
       this._renderer(el);
     });
   }

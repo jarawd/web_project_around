@@ -1,8 +1,9 @@
 export default class UserInfo {
-  constructor({ nameSelector, jobSelector }, popupSelector) {
+  constructor({ nameSelector, jobSelector, setUser }, popupSelector) {
     this._nameSelector = nameSelector;
     this._jobSelector = jobSelector;
     this._popupSelector = popupSelector;
+    this._setUser = setUser;
   }
 
   getUserInfo() {
@@ -19,5 +20,6 @@ export default class UserInfo {
     this._jobSelector.textContent = this._popupSelector.querySelector(
       ".popup__form-item_info"
     ).value;
+    this._setUser(this._popupSelector);
   }
 }

@@ -3,6 +3,7 @@ export default class FormValidator {
     this._inputErrorClass = data.inputErrorClass;
     this._submitButton = data.submitButtonSelector;
     this._inactiveButton = data.inactiveButtonClass;
+    this._input = data.input;
     this._form = formSelector;
   }
 
@@ -43,9 +44,7 @@ export default class FormValidator {
   }
 
   enableValidation = () => {
-    const inputList = Array.from(
-      this._form.querySelectorAll(".popup__form-item")
-    );
+    const inputList = Array.from(this._form.querySelectorAll(this._input));
     this._toggleButton(inputList);
     this._form.addEventListener("submit", (e) => {
       e.preventDefault();

@@ -48,18 +48,30 @@
   overflow: hidden;
 }
 
-.elements__heart {
+.elements__container-likes {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+}
+
+.elements__likes-counter {
+  font-size: 13px;
+}
+
+.elements__like {
   width: 20.76px;
   height: 18.13px;
   background-image: url(../images/heart-icon-empty.svg);
   transition: opacity 0.2s ease;
 }
 
-.elements__like {
+.elements__like-fill {
   background-image: url(../images/heart-icon-fill.svg);
 }
 
-.elements__heart:hover {
+.elements__like:hover {
   opacity: 0.6;
   cursor: pointer;
 }

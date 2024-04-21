@@ -6,6 +6,7 @@ export default class PopupWithForm extends Popup {
     this._popupSelector = popupSelector;
     this._data = data;
     this._setData = setData;
+    this.buttonName = data.buttonName;
   }
 
   open() {
@@ -46,7 +47,7 @@ export default class PopupWithForm extends Popup {
     this._popupSelector.querySelector(".popup__form-item_info").type =
       this._data.type;
     this._popupSelector.querySelector(".popup__form-button").textContent =
-      this._data.buttonName;
+      this.buttonName;
 
     this._popupSelector
       .querySelector(".popup__form-item_name")
@@ -84,10 +85,11 @@ export default class PopupWithForm extends Popup {
       .addEventListener("submit", () => {
         if (this._data.values) {
           this._setData().setUserInfo();
+          this.close();
         } else {
           this._setData(this._getInputValues());
         }
-        this.close();
+        this._resetForm();
       });
 
     this._popupSelector

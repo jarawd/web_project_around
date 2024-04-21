@@ -18,6 +18,7 @@ Sitio web que contiene fotografias de lugares de Estados Unidos. Además tiene l
 - Javascript modular.
 - Git.
 - Webpack.
+- API.
 
 # Enlace al sitio web:
 
