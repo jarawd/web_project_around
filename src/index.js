@@ -109,9 +109,7 @@ api
 
     renderCards.renderItems();
   })
-  .catch((err) => {
-    console.log(err);
-  });
+  .catch((err) => console.log(err));
 
 /* Event Listeners */
 

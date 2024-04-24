@@ -35,11 +35,27 @@ export default class Card {
       this._card.insertAdjacentElement("afterbegin", trashIcon);
     }
     this.setEventListeners();
+    this._fillLikeButton();
     return this._card;
   }
 
   getImage() {
     return this._card.querySelector(".elements__img");
+  }
+
+  _fillLikeButton() {
+    const likeOwner = this._obj.likes.some((el) => {
+      return el._id === "38cc323bf81d67435752af78";
+    });
+    if (this._obj.likes.length > 0 && likeOwner) {
+      this._card
+        .querySelector(".elements__like")
+        .classList.add("elements__like-fill");
+    } else {
+      this._card
+        .querySelector(".elements__like")
+        .classList.remove("elements__like-fill");
+    }
   }
 
   setEventListeners() {
